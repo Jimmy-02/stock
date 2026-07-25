@@ -2,7 +2,7 @@
 import useTradingViewWidget from "@/app/hooks/useTradingViewWidget";
 import { TradingViewWidgetProps } from "@/app/types/TradingViewWidgetProps";
 import { cn } from "@/lib/utils";
-import React, { useEffect, useRef, memo } from "react";
+import { memo } from "react";
 
 const TradingViewWidget = ({title, scriptUrl, config, height=600, className}: TradingViewWidgetProps) => {
   const containerRef = useTradingViewWidget(scriptUrl, config, height);
