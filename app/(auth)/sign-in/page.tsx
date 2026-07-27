@@ -1,3 +1,4 @@
+'use client';
 import FooterLink from '@/components/forms/FooterLink';
 import InputField from '@/components/forms/InputField';
 import { Button } from '@/components/ui/button';
@@ -34,7 +35,7 @@ const SignIn = () => {
         <InputField
           name="email"
           label="Email"
-          placeholder="contact@jsmastery.com"
+          placeholder="contact@gmail.com"
           register={register}
           error={errors.email}
           validation={{
