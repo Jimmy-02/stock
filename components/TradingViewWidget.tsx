@@ -1,6 +1,5 @@
 'use client';
 import useTradingViewWidget from "@/app/hooks/useTradingViewWidget";
-import { TradingViewWidgetProps } from "@/app/types/TradingViewWidgetProps";
 import { cn } from "@/lib/utils";
 import { memo } from "react";
 
