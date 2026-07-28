@@ -3,10 +3,15 @@ import { CountrySelectField } from '@/components/forms/CountrySelectField';
 import InputField from '@/components/forms/InputField';
 import SelectField from '@/components/forms/SelectField';
 import { Button } from '@/components/ui/button';
+import { signUpWithEmail } from '@/lib/actions/auth.actions';
 import { INVESTMENT_GOALS, PREFERRED_INDUSTRIES, RISK_TOLERANCE_OPTIONS } from '@/lib/constants';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import FooterLink from "@/components/forms/FooterLink";
 
 const SignUp = () => {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -25,16 +30,34 @@ const SignUp = () => {
     mode: "onBlur",
   });
 
-  const onSubmit = async (data: SignUpFormData) => {
-    try {
-        
-    } catch (error) {
-        console.error(error);
+const onSubmit = async (data: SignUpFormData) => {
+  try {
+    const result = await signUpWithEmail(data);
+    if (result.success) {
+      router.push("/");
+    } else {
+      toast.error("Sign up failed", {
+        description: result.error ?? "Failed to create an account.",
+      });
     }
+  } catch (error) {
+    console.error(error);
+    toast.error("Sign up failed", {
+      description:
+        error instanceof Error ? error.message : "Failed to create an account.",
+    });
   }
+};
   return (
     <>
       <h1 className="form-title">Sign Up & Personalize</h1>
+      <div className="-mt-6 mb-5">
+        <FooterLink
+          text="Already have an account?"
+          linkText="Sign in"
+          href="/sign-in"
+        />
+      </div>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <InputField
           name="fullName"
@@ -42,7 +65,13 @@ const SignUp = () => {
           placeholder="John Cena"
           register={register}
           error={errors.fullName}
-          validation={{ required: "Full name is required", minLength: 2 }}
+          validation={{
+            required: "Full name is required",
+            minLength: {
+              value: 2,
+              message: "Full name must be at least 2 characters",
+            },
+          }}
         />
         <InputField
           name="email"
@@ -53,7 +82,7 @@ const SignUp = () => {
           validation={{
             required: "Email is required",
             pattern: {
-              value: /^\w+@\w+\.\w+$/,
+              value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
               message: "Please enter a valid email address",
             },
           }}
@@ -66,7 +95,19 @@ const SignUp = () => {
           type="password"
           register={register}
           error={errors.password}
-          validation={{ required: "Password is required", minLength: 8 }}
+          validation={{
+            required: "Password is required",
+            minLength: {
+              value: 8,
+              message: "Password must be at least 8 characters",
+            },
+            pattern: {
+              value:
+                /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/,
+              message:
+                "Password must include uppercase, lowercase, number, and special character",
+            },
+          }}
         />
         <CountrySelectField
           name="country"

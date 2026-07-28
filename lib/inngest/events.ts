@@ -2,7 +2,7 @@ import { eventType, staticSchema } from "inngest";
 
 type UserCreatedPayload = {
   email: string;
-  fullName: string;
+  name: string;
   country: string;
   investmentGoals: string;
   riskTolerance: string;
