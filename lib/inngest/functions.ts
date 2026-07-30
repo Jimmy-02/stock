@@ -1,6 +1,6 @@
 import { inngest } from "@/lib/inngest/client";
 import { userCreated } from "@/lib/inngest/events";
-import {NEWS_SUMMARY_EMAIL_PROMPT,PERSONALIZED_WELCOME_EMAIL_PROMPT,} from "@/lib/inngest/prompts";
+import {PERSONALIZED_WELCOME_EMAIL_PROMPT,} from "@/lib/inngest/prompts";
 import { sendWelcomeEmail } from "../nodemailer";
 
 export const sendSignUpEmail = inngest.createFunction(
@@ -45,3 +45,14 @@ export const sendSignUpEmail = inngest.createFunction(
     };
   },
 );
+
+export const sendDailyNewsSummary = inngest.createFunction(
+  {
+    id: "daily-news-summary",
+    triggers: [{ event: "app/send.daily.news" }, { cron: "0 12 * * *" }],
+  },
+  async ({ step }) => {
+    
+  },
+);
+
