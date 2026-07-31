@@ -242,6 +242,11 @@ declare global {
     height?: number;
     className?: string;
   };
+  interface UserForNewsEmail {
+    id: string;
+    email: string;
+    name: string;
+  }
 }
 
 export {};
