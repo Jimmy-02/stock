@@ -76,15 +76,12 @@ The project follows a full-stack architecture using the Next.js App Router.
 Stock
 ├── app
 ├── components
-├── db
-├── inngest
+├── database
 ├── lib
-├── models
-├── services
-├── actions
-├── hooks
+├── middleware
 ├── types
 └── public
+└── scripts
 ```
 
 The application uses Next.js for both the frontend and backend. Authentication is handled by Better Auth, MongoDB stores user and watchlist data, Inngest manages background jobs such as alerts and scheduled tasks, while TradingView widgets provide real-time market visualization.
