@@ -1,90 +1,92 @@
 # Stock
 
-![GitHub last commit](https://img.shields.io/github/last-commit/Jimmy-02/stock)
-![GitHub Repo stars](https://img.shields.io/github/stars/Jimmy-02/stock)
-![GitHub Issues](https://img.shields.io/github/issues/Jimmy-02/stock)
-![GitHub repo size](https://img.shields.io/github/repo-size/Jimmy-02/stock)
-![GitHub top language](https://img.shields.io/github/languages/top/Jimmy-02/stock)
+![GitHub last commit](https://img.shields.io/github/last-commit/Jimmy-02/stock) ![GitHub Repo stars](https://img.shields.io/github/stars/Jimmy-02/stock) ![GitHub Issues](https://img.shields.io/github/issues/Jimmy-02/stock) ![GitHub repo size](https://img.shields.io/github/repo-size/Jimmy-02/stock) ![GitHub top language](https://img.shields.io/github/languages/top/Jimmy-02/stock)
 
-Stock is a modern stock market tracking platform built with Next.js and TypeScript. The application enables users to monitor stock prices, manage personalized watchlists, set price alerts, and explore market insights through an intuitive dashboard.
-
-The project leverages Better Auth for authentication, MongoDB for data persistence, Inngest for background workflows, and TradingView widgets for interactive market visualization.
+A Next.js + TypeScript app for tracking stocks in real time. Users can search companies, explore TradingView-powered charts and technical analysis, curate a personal watchlist, and get automated emails — an AI-generated welcome message on sign-up and a daily news summary tailored to their watchlist, both handled by background jobs running on Inngest.
 
 ---
 
 ## Tech Stack
 
 ### Frontend
-
-- Next.js 15
-- React 19
+- Next.js (App Router)
+- React
 - TypeScript
-- Tailwind CSS v4
-- shadcn/ui
+- Tailwind CSS
+- Shadcn
 - React Hook Form
-- Zod
 
 ### Backend
-
 - Next.js Server Actions
-- Better Auth
 - MongoDB
 - Mongoose
+- Better Auth
+- Inngest (background jobs & scheduled functions)
 - Nodemailer
+- Google Gemini AI
+- Finnhub API
 
-### Automation & Tools
-
-- Inngest
+### DevOps & Tools
+- GitHub Actions
 - ESLint
-- Prettier
+- TypeScript type checking
+- Gitleaks (secret scanning)
 
 ---
 
 ## Features
 
-### User
+### Authentication
+- Sign up with investment profile (country, investment goals, risk tolerance, preferred industry)
+- Sign in / sign out
+- Session-based route protection via middleware
 
-- User authentication
-- Browse stock information
-- Search stocks
-- Stock detail pages
-- Interactive TradingView charts
-- Personalized watchlist
-- Responsive user interface
+### Stock Tracking
+- Search stocks by symbol or company name
+- Detailed stock page with live candlestick chart, baseline chart, and symbol overview
+- Technical analysis widget (buy/sell/neutral signals)
+- Company profile and financials widgets
+- Add or remove stocks from a personal watchlist
 
-### Notifications
-
-- Create price alerts
-- Email notifications
-- Automated background workflows with Inngest
+### Automated Notifications (Inngest)
+- Personalized AI-generated welcome email on sign-up
+- Daily news summary email, generated per user based on their watchlist and summarized with Gemini AI
+- Scheduled cron job in addition to event-triggered runs
 
 ### System
-
-- Secure authentication with Better Auth
-- MongoDB data persistence
-- Server-side rendering with Next.js
-- Type-safe validation using Zod
-- Background event processing
+- Server-rendered pages with Next.js App Router
+- Type-safe server actions
+- Rate-limited / batched external API calls to Finnhub
+- CI pipeline with lint, type-check, build, dependency audit, and secret scanning
 
 ---
 
 ## Architecture
 
-The project follows a full-stack architecture using the Next.js App Router.
+The project is a single Next.js application using the App Router, with route groups separating public marketing/stock pages from authentication pages.
 
 ```text
-Stock
+stock
 ├── app
-├── components
-├── database
+│   ├── (root)          # Dashboard, search, watchlist, stock details — behind auth
+│   ├── (auth)          # Sign in / sign up pages
+│   ├── api/inngest      # Inngest webhook endpoint
+│   ├── hooks            # Client-side hooks (TradingView widget, debounce)
+│   └── types            # Global TypeScript declarations
+├── components            # UI components (Header, Search, Watchlist, forms, shadcn ui)
 ├── lib
-├── middleware
-├── types
-└── public
-└── scripts
+│   ├── actions           # Server actions (auth, user, watchlist, finnhub)
+│   ├── better-auth        # Better Auth configuration
+│   ├── inngest            # Inngest client, event schemas, functions, AI prompts
+│   └── nodemailer         # Email transport and templates
+├── database
+│   ├── mongoose.ts        # MongoDB/Mongoose connection
+│   └── models             # Mongoose schemas (Watchlist)
+├── middleware/index.ts    # Session-based route protection
+└── scripts                # DB connectivity test script
 ```
 
-The application uses Next.js for both the frontend and backend. Authentication is handled by Better Auth, MongoDB stores user and watchlist data, Inngest manages background jobs such as alerts and scheduled tasks, while TradingView widgets provide real-time market visualization.
+User authentication and session cookies are handled by Better Auth. Stock data, company profiles, and search results are fetched from the Finnhub API. Watchlist data is stored in MongoDB via Mongoose. Welcome emails and daily news summaries are generated by Google Gemini and dispatched as background jobs through Inngest, then delivered via Nodemailer.
 
 ---
 
@@ -108,10 +110,10 @@ Install dependencies.
 npm install
 ```
 
-Create the environment file.
+Create the required environment file.
 
 ```text
-.env.local
+.env
 ```
 
 Start the development server.
@@ -119,6 +121,8 @@ Start the development server.
 ```bash
 npm run dev
 ```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 ---
 
@@ -136,43 +140,68 @@ Build the project.
 npm run build
 ```
 
-Start the production server.
-
-```bash
-npm start
-```
-
 Run ESLint.
 
 ```bash
 npm run lint
 ```
 
+Run TypeScript type checking.
+
+```bash
+npm run type-check
+```
+
+Test the MongoDB connection.
+
+```bash
+npm run test:db
+```
+
 ---
 
 ## Environment Variables
 
-The project requires environment variables for the following services:
+The project requires the following environment variables, defined in `.env` (see `.env.example`):
 
-- MongoDB
-- Better Auth
-- Inngest
-- Nodemailer
-- Stock Market API
-- TradingView configuration
+```text
+NEXT_PUBLIC_BASE_URL=
+
+MONGODB_URI=
+
+BETTER_AUTH_SECRET=
+BETTER_AUTH_URL=
+
+GEMINI_API_KEY=
+
+NODEMAILER_EMAIL=
+NODEMAILER_PASSWORD=
+
+NEXT_PUBLIC_FINNHUB_API_KEY=
+```
+
+| Variable | Description |
+|---|---|
+| `NEXT_PUBLIC_BASE_URL` | Base URL of the deployed app |
+| `MONGODB_URI` | MongoDB connection string |
+| `BETTER_AUTH_SECRET` | Secret key used by Better Auth |
+| `BETTER_AUTH_URL` | Base URL used by Better Auth |
+| `GEMINI_API_KEY` | Google Gemini API key, used to generate email content |
+| `NODEMAILER_EMAIL` | Sender email address for outgoing emails |
+| `NODEMAILER_PASSWORD` | App password for the sender email account |
+| `NEXT_PUBLIC_FINNHUB_API_KEY` | Finnhub API key for stock market data |
 
 ---
 
-## Future Improvements
+## CI/CD
 
-- Email verification
-- Forgot password
-- OAuth providers
-- Portfolio management
-- Historical performance analytics
-- News aggregation
-- Multiple watchlists
-- Dark mode improvements
+A GitHub Actions workflow runs on every push and pull request to `main`, performing:
+- Dependency installation
+- Lint
+- Type checking
+- Production build
+- Dependency vulnerability audit
+- Secret scanning with Gitleaks
 
 ---
 
