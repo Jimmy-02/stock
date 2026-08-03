@@ -28,8 +28,7 @@ describe("searchStocks", () => {
     delete process.env.FINNHUB_API_KEY;
     delete process.env.NEXT_PUBLIC_FINNHUB_API_KEY;
 
-    const { searchStocks } =
-      await import(finnhubActionsPath);
+    const { searchStocks } =await import(finnhubActionsPath);
     const result = await searchStocks();
 
     expect(result).toEqual([]);
@@ -53,8 +52,7 @@ describe("searchStocks", () => {
       }),
     });
 
-    const { searchStocks } =
-      await import(finnhubActionsPath);
+    const { searchStocks } =await import(finnhubActionsPath);
     const result = await searchStocks("tesla");
 
     expect(result[0].symbol).toBe("TSLA");
@@ -75,8 +73,7 @@ describe("searchStocks", () => {
       json: async () => ({ count: 20, result: manyResults }),
     });
 
-    const { searchStocks } =
-      await import(finnhubActionsPath);
+    const { searchStocks } =await import(finnhubActionsPath);
     const result = await searchStocks("company");
 
     expect(result.length).toBeLessThanOrEqual(15);
@@ -86,8 +83,7 @@ describe("searchStocks", () => {
     process.env.FINNHUB_API_KEY = "test-key";
     mockFetch.mockRejectedValue(new Error("network error"));
 
-    const { searchStocks } =
-      await import(finnhubActionsPath);
+    const { searchStocks } =await import(finnhubActionsPath);
     const result = await searchStocks();
 
     expect(result).toEqual([]);
