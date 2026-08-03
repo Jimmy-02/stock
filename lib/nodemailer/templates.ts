@@ -94,13 +94,6 @@ export const WELCOME_EMAIL_TEMPLATE = `<!DOCTYPE html>
             <td align="center" class="mobile-outer-padding" style="padding: 40px 20px;">
                 <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" class="email-container" style="max-width: 600px; background-color: #141414; border-radius: 8px; border: 1px solid #30333A;">
                     
-                    <!-- Header with Logo -->
-                    <tr>
-                        <td align="left" class="mobile-header-padding" style="padding: 40px 40px 20px 40px;">
-                            <img src="https://ik.imagekit.io/a6fkjou7d/logo.png?updatedAt=1756378431634" alt="Stock Logo" width="150" style="max-width: 100%; height: auto;">
-                        </td>
-                    </tr>
-                    
                     <!-- Dashboard Preview Image -->
                     <tr>
                         <td align="center" class="dashboard-preview" style="padding: 40px 40px 0px 40px;">
