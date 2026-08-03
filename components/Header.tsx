@@ -11,14 +11,15 @@ const Header = async ({ user }: { user: User }) => {
   return (
     <header className="sticky top-0 header">
       <div className="container header-wrapper">
-        <Link href="/">
+        <Link href="/" className="flex items-center">
           <Image
-            src="/assets/icons/logo.svg"
-            alt="Signalist logo"
+            src="/assets/icons/logo2.png"
+            alt="Stock logo"
             width={140}
             height={32}
-            className="h-8 w-auto cursor-pointer"
+            className="h-10 w-auto cursor-pointer"
           />
+          <p className="text-3xl font-bold py-1 pl-3">Stock</p>
         </Link>
         <nav className="hidden sm:block">
           <NavItems initialStocks={initialStocks} />
