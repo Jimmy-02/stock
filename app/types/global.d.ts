@@ -247,6 +247,21 @@ declare global {
     email: string;
     name: string;
   }
+  interface FinnhubProfile2 {
+    name?: string;
+    ticker?: string;
+    exchange?: string;
+    finnhubIndustry?: string;
+    marketCapitalization?: number;
+    logo?: string;
+    weburl?: string;
+    currency?: string;
+    country?: string;
+  }
+
+  interface PopularStockResult extends FinnhubSearchResult {
+    exchange?: string;
+  }
 }
 
 export {};

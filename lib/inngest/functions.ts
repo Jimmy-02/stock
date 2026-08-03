@@ -1,5 +1,6 @@
 import { inngest } from "@/lib/inngest/client";
-import {NEWS_SUMMARY_EMAIL_PROMPT,
+import {
+  NEWS_SUMMARY_EMAIL_PROMPT,
   PERSONALIZED_WELCOME_EMAIL_PROMPT,
 } from "@/lib/inngest/prompts";
 import { sendNewsSummaryEmail, sendWelcomeEmail } from "@/lib/nodemailer";
@@ -8,7 +9,6 @@ import { getWatchlistSymbolsByEmail } from "@/lib/actions/watchlist.actions";
 import { getNews } from "@/lib/actions/finnhub.actions";
 import { getFormattedTodayDate } from "@/lib/utils";
 import { userCreated } from "./events";
-
 
 export const sendSignUpEmail = inngest.createFunction(
   { id: "sign-up-email", triggers: [userCreated] },
@@ -140,3 +140,4 @@ export const sendDailyNewsSummary = inngest.createFunction(
     };
   },
 );
+
